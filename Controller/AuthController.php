@@ -22,8 +22,11 @@ class AuthController extends ContainerAware
      *
      * @param Request $request
      */
-    public function authAction(Request $request)
+    public function authAction(Request $request,$id)
     {
+        
+        $_GET['call_id'] = $id ;
+
         $socketId = $request->get('socket_id');
         $channelName = $request->get('channel_name');
 
