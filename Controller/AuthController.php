@@ -49,14 +49,11 @@ class AuthController extends ContainerAware
         
         $responseData['auth'] = $this->container->getParameter('lopi_pusher.key') . ':' . $this->getCode($data);
         
-        if($request->getMethod() == 'GET') {
+        if ($request->getMethod() == 'GET') {
             $callback = $request->get('callback');
-            //$callback = str_replace('\\', '', $callback);
             
-            echo($callback . '(' . json_encode($responseData) . ');');
-            exit ;
+            return new Reponse($callback . '(' . json_encode($responseData) . ');');
         }
-
         
         return new Response(json_encode($responseData), 200, array('Content-Type' => 'application/json'));
     }
