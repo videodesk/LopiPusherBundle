@@ -52,7 +52,7 @@ class AuthController extends ContainerAware
         if ($request->getMethod() == 'GET') {
             $callback = $request->get('callback');
             
-            return new Reponse($callback . '(' . json_encode($responseData) . ');');
+            return new Response($callback . '(' . json_encode($responseData) . ');');
         }
         
         return new Response(json_encode($responseData), 200, array('Content-Type' => 'application/json'));
