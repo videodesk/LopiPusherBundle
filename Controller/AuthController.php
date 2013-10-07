@@ -42,21 +42,22 @@ class AuthController extends ContainerAware
         }
 
         if (strpos($channelName, 'presence') === 0 && $authenticator instanceof ChannelAuthenticatorPresenceInterface) {
+           
             $responseData['channel_data'] = json_encode(array('user_id' => $authenticator->getUserId(), 'user_info' => $authenticator->getUserInfo()));
             $data .= ':' . $responseData['channel_data'];
         }
         
-        if($request->getMethod() == 'GET')
-        {
+        $responseData['auth'] = $this->container->getParameter('lopi_pusher.key') . ':' . $this->getCode($data);
+        
+        if($request->getMethod() == 'GET') {
             $callback = $request->get('callback');
-            $callback = str_replace('\\', '', $callback);
-    
+            //$callback = str_replace('\\', '', $callback);
+            
             echo($callback . '(' . json_encode($responseData) . ');');
             exit ;
         }
 
-        $responseData['auth'] = $this->container->getParameter('lopi_pusher.key') . ':' . $this->getCode($data);
-
+        
         return new Response(json_encode($responseData), 200, array('Content-Type' => 'application/json'));
     }
 
