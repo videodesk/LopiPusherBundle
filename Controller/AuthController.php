@@ -42,7 +42,6 @@ class AuthController extends ContainerAware
         }
 
         if (strpos($channelName, 'presence') === 0 && $authenticator instanceof ChannelAuthenticatorPresenceInterface) {
-           
             $responseData['channel_data'] = json_encode(array('user_id' => $authenticator->getUserId(), 'user_info' => $authenticator->getUserInfo()));
             $data .= ':' . $responseData['channel_data'];
         }
@@ -51,6 +50,10 @@ class AuthController extends ContainerAware
         
         if ($request->getMethod() == 'GET') {
             $callback = $request->get('callback');
+            
+            if (! preg_match("#^Pusher.auth_callbacks\[\'[0-9]+\'\]$#", $callback)) {
+                throw new \Exception('Invalid Parameters');
+            }
             
             return new Response($callback . '(' . json_encode($responseData) . ');');
         }
